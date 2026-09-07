@@ -6,7 +6,7 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   trustedOrigins: [
     "http://localhost:3000",
-    "https://bc6z4nd9-3000.asse.devtunnels.ms",
+    "https://cash-drawer-template.vercel.app",
   ],
   socialProviders: {
     google: {
