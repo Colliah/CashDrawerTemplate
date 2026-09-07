@@ -1,0 +1,31 @@
+   ▲ Next.js 15.5.25
+   - Local:        http://localhost:3002
+   - Network:      http://192.168.1.192:3002
+   - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 1566ms
+ ○ Compiling /api/auth/[...all] ...
+ ✓ Compiled /api/auth/[...all] in 1457ms (1010 modules)
+ POST /api/auth/sign-in/social 500 in 3082ms
+   Reload env: .env
+ ✓ Compiled in 121ms (195 modules)
+   Reload env: .env
+ ✓ Compiled in 83ms (195 modules)
+ ✓ Compiled in 270ms (195 modules)
+ ✓ Compiled in 217ms (195 modules)
+   Reload env: .env
+ ✓ Compiled in 182ms (195 modules)
+   Reload env: .env
+ ✓ Compiled in 77ms (195 modules)
+   Reload env: .env
+ ✓ Compiled in 70ms (195 modules)
+   Reload env: .env
+ ✓ Compiled in 74ms (195 modules)
+   Reload env: .env
+ ✓ Compiled in 79ms (195 modules)
+   Reload env: .env
+ ✓ Compiled in 80ms (195 modules)
+   Reload env: .env
+ ✓ Compiled in 69ms (195 modules)
+ ✓ Compiled in 91ms (195 modules)

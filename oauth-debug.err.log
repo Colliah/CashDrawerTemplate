@@ -1,0 +1,22 @@
+2026-09-07T05:29:38.525Z ERROR [Better Auth]: PrismaClientInitializationError [Error [PrismaClientInitializationError]: 
+Invalid `prisma.verification.create()` invocation:
+
+
+Can't reach database server at `ep-polished-math-a5q40mlg-pooler.us-east-2.aws.neon.tech:5432`
+
+Please make sure your database server is running at `ep-polished-math-a5q40mlg-pooler.us-east-2.aws.neon.tech:5432`.] {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
+# SERVER_ERROR:  [Error [PrismaClientInitializationError]: 
+Invalid `prisma.verification.create()` invocation:
+
+
+Can't reach database server at `ep-polished-math-a5q40mlg-pooler.us-east-2.aws.neon.tech:5432`
+
+Please make sure your database server is running at `ep-polished-math-a5q40mlg-pooler.us-east-2.aws.neon.tech:5432`.] {
+  clientVersion: '6.19.3',
+  errorCode: undefined,
+  retryable: undefined
+}
