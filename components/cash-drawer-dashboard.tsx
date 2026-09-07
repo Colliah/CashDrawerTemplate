@@ -217,7 +217,7 @@ export function CashDrawerDashboard({ user, initialHistory }: Props) {
       }
     });
   }
-  function exportRecord(
+ function exportRecord(
     id: string,
     kind: "preview" | "pdf" | "image" | "excel",
   ) {
@@ -234,13 +234,14 @@ export function CashDrawerDashboard({ user, initialHistory }: Props) {
         // ==================== 1. PREVIEW & PDF ====================
         if (kind === "preview" || kind === "pdf") {
           const pdf = new jsPDF({ unit: "mm", format: "a4" });
-          
-          // Viền bao ngoài thẻ cash-slip
+
+          // Khung viền ngoài (cash-slip)
           pdf.setDrawColor(23, 50, 82);
           pdf.setLineWidth(0.6);
           pdf.roundedRect(10, 10, 190, 277, 2, 2);
 
-          // Header - Cột trái: Manager on Duty & Cashier
+          // HÀNG 1 (Header chia 3 cột): Manager on Duty | Cashier | Total
+          // Cột 1: Manager on Duty
           pdf.setFont("helvetica", "bold");
           pdf.setFontSize(8);
           pdf.setTextColor(51, 65, 85);
@@ -248,40 +249,41 @@ export function CashDrawerDashboard({ user, initialHistory }: Props) {
           pdf.setFont("helvetica", "normal");
           pdf.setFontSize(9.5);
           pdf.setTextColor(15, 23, 42);
-          pdf.text(row.manager || "", 15, 23);
+          pdf.text(row.manager || "", 15, 25);
           pdf.setDrawColor(148, 163, 184);
           pdf.setLineWidth(0.2);
-          pdf.line(15, 24.5, 95, 24.5);
+          pdf.line(15, 27, 70, 27);
 
+          // Cột 2: Cashier
           pdf.setFont("helvetica", "bold");
           pdf.setFontSize(8);
           pdf.setTextColor(51, 65, 85);
-          pdf.text("Cashier", 15, 29.5);
+          pdf.text("Cashier", 75, 18);
           pdf.setFont("helvetica", "normal");
           pdf.setFontSize(9.5);
           pdf.setTextColor(15, 23, 42);
-          pdf.text(row.cashier || "", 15, 34.5);
-          pdf.line(15, 36, 95, 36);
+          pdf.text(row.cashier || "", 75, 25);
+          pdf.line(75, 27, 130, 27);
 
-          // Header - Cột phải: Box TOTAL màu vàng
+          // Cột 3: Hộp TOTAL vàng
           pdf.setFillColor(253, 224, 71); // bg-yellow-300
           pdf.setDrawColor(23, 50, 82);
           pdf.setLineWidth(0.3);
-          pdf.roundedRect(155, 15, 35, 21, 1.5, 1.5, "F");
+          pdf.roundedRect(140, 14, 55, 18, 1.5, 1.5, "F");
           pdf.setFont("helvetica", "bold");
           pdf.setFontSize(8);
           pdf.setTextColor(30, 41, 59);
-          pdf.text("TOTAL", 172.5, 21, { align: "center" });
+          pdf.text("TOTAL", 167.5, 19, { align: "center" });
           pdf.setFontSize(13);
           pdf.setTextColor(2, 6, 23);
-          pdf.text(money(row.total), 172.5, 30, { align: "center" });
+          pdf.text(money(row.total), 167.5, 28, { align: "center" });
 
-          // Đường kẻ ngang ngăn cách header
+          // Đường kẻ ngang ngăn cách hàng 1 và hàng 2 (border-b-2)
           pdf.setLineWidth(0.5);
           pdf.setDrawColor(23, 50, 82);
-          pdf.line(15, 41, 195, 41);
+          pdf.line(15, 36, 195, 36);
 
-          // Section 3 CỘT: Date | Time | Drawer
+          // HÀNG 2 (Section chia 3 cột): Date | Time | Drawer
           pdf.setLineWidth(0.25);
           pdf.setDrawColor(100, 116, 139); // border-slate-500
           const threeCols = [
@@ -292,7 +294,7 @@ export function CashDrawerDashboard({ user, initialHistory }: Props) {
 
           const startX = 15;
           const colW = 180 / 3; // 60mm mỗi cột
-          const secY = 46;
+          const secY = 41;
           const secH = 14;
 
           threeCols.forEach((col, idx) => {
@@ -314,7 +316,7 @@ export function CashDrawerDashboard({ user, initialHistory }: Props) {
             heads: string[],
             rows: string[][],
           ) => {
-            let yy = 67;
+            let yy = 62;
             const width = 85;
             const cw = width / heads.length;
 
@@ -322,6 +324,7 @@ export function CashDrawerDashboard({ user, initialHistory }: Props) {
             pdf.rect(x, yy, width, 8, "F");
             pdf.setFont("helvetica", "bold");
             pdf.setFontSize(9);
+            pdf.setTextColor(15, 23, 42);
             pdf.text(title, x + 3, yy + 5.5);
             yy += 8;
 
@@ -384,61 +387,63 @@ export function CashDrawerDashboard({ user, initialHistory }: Props) {
           const ctx = canvas.getContext("2d");
           if (!ctx) throw new Error("Canvas unavailable");
 
-          // Nền trắng và khung bao
+          // Nền và viền ngoài
           ctx.fillStyle = "white";
           ctx.fillRect(0, 0, 1200, 1450);
           ctx.strokeStyle = "#1e293b";
           ctx.lineWidth = 3;
           ctx.strokeRect(25, 25, 1150, 1400);
 
-          // Header - Trái: Manager on Duty & Cashier
+          // HÀNG 1: 3 CỘT (Manager on Duty | Cashier | Total)
+          // Cột 1: Manager on Duty
           ctx.fillStyle = "#334155";
           ctx.font = "bold 15px Arial";
           ctx.fillText("Manager on Duty", 65, 75);
           ctx.fillStyle = "#0f172a";
-          ctx.font = "19px Arial";
-          ctx.fillText(row.manager || "", 65, 105);
+          ctx.font = "20px Arial";
+          ctx.fillText(row.manager || "", 65, 115);
           ctx.strokeStyle = "#94a3b8";
           ctx.lineWidth = 1.5;
           ctx.beginPath();
-          ctx.moveTo(65, 115);
-          ctx.lineTo(600, 115);
+          ctx.moveTo(65, 125);
+          ctx.lineTo(390, 125);
           ctx.stroke();
 
+          // Cột 2: Cashier
           ctx.fillStyle = "#334155";
           ctx.font = "bold 15px Arial";
-          ctx.fillText("Cashier", 65, 150);
+          ctx.fillText("Cashier", 430, 75);
           ctx.fillStyle = "#0f172a";
-          ctx.font = "19px Arial";
-          ctx.fillText(row.cashier || "", 65, 180);
+          ctx.font = "20px Arial";
+          ctx.fillText(row.cashier || "", 430, 115);
           ctx.beginPath();
-          ctx.moveTo(65, 190);
-          ctx.lineTo(600, 190);
+          ctx.moveTo(430, 125);
+          ctx.lineTo(750, 125);
           ctx.stroke();
 
-          // Header - Phải: TOTAL
+          // Cột 3: Total box
           ctx.fillStyle = "#fde047";
-          ctx.fillRect(920, 60, 215, 125);
+          ctx.fillRect(800, 55, 335, 90);
           ctx.fillStyle = "#1e293b";
           ctx.font = "bold 16px Arial";
           ctx.textAlign = "center";
-          ctx.fillText("TOTAL", 1027, 95);
+          ctx.fillText("TOTAL", 967, 85);
           ctx.fillStyle = "#020617";
           ctx.font = "bold 32px Arial";
-          ctx.fillText(money(row.total), 1027, 145);
+          ctx.fillText(money(row.total), 967, 125);
           ctx.textAlign = "left";
 
-          // Đường kẻ header
+          // Đường kẻ ngang ngăn cách header
           ctx.strokeStyle = "#1e293b";
           ctx.lineWidth = 3;
           ctx.beginPath();
-          ctx.moveTo(65, 220);
-          ctx.lineTo(1135, 220);
+          ctx.moveTo(65, 175);
+          ctx.lineTo(1135, 175);
           ctx.stroke();
 
-          // Lưới 3 CỘT: Date | Time | Drawer
+          // HÀNG 2: 3 CỘT (Date | Time | Drawer)
           const boxX = 65;
-          const boxY = 245;
+          const boxY = 205;
           const boxW = 1070;
           const colW = boxW / 3;
           const boxH = 80;
@@ -447,7 +452,6 @@ export function CashDrawerDashboard({ user, initialHistory }: Props) {
           ctx.lineWidth = 2;
           ctx.strokeRect(boxX, boxY, boxW, boxH);
 
-          // Kẻ dọc phân 3 cột
           ctx.beginPath();
           ctx.moveTo(boxX + colW, boxY);
           ctx.lineTo(boxX + colW, boxY + boxH);
@@ -466,14 +470,14 @@ export function CashDrawerDashboard({ user, initialHistory }: Props) {
             ctx.fillStyle = "#0f172a";
             ctx.font = "bold 16px Arial";
             ctx.fillText(col.label, startColX, boxY + 30);
-            ctx.font = "18px Arial";
+            ctx.font = "20px Arial";
             ctx.fillText(col.val, startColX, boxY + 62);
           });
 
           // Tiêu đề bảng tiền
           ctx.font = "bold 24px Arial";
-          ctx.fillText("COINS", 65, 380);
-          ctx.fillText("BILLS", 650, 380);
+          ctx.fillText("COINS", 65, 360);
+          ctx.fillText("BILLS", 650, 360);
 
           ctx.font = "18px Arial";
           coinInfo.forEach((c, index) => {
@@ -483,7 +487,7 @@ export function CashDrawerDashboard({ user, initialHistory }: Props) {
             ctx.fillText(
               `${c.label}   Rolls: ${coins[c.key]?.rolled ?? 0}   Loose: ${coins[c.key]?.loose ?? 0}   ${money(lineTotal)}`,
               65,
-              430 + index * 55,
+              410 + index * 55,
             );
           });
 
@@ -492,7 +496,7 @@ export function CashDrawerDashboard({ user, initialHistory }: Props) {
             ctx.fillText(
               `$${b.value}   Qty: ${bills[b.key] ?? 0}   ${money(lineTotal)}`,
               650,
-              430 + index * 55,
+              410 + index * 55,
             );
           });
 
@@ -511,7 +515,7 @@ export function CashDrawerDashboard({ user, initialHistory }: Props) {
         if (kind === "excel") {
           const cell = (v: unknown) =>
             `<Cell><Data ss:Type="String">${xmlEscape(v)}</Data></Cell>`;
-          const xml = `<?xml version="1.0"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Worksheet ss:Name="Cash Count"><Table><Row>${cell("Manager on Duty")}${cell(row.manager)}${cell("")}${cell("TOTAL")}${cell(money(row.total))}</Row><Row>${cell("Cashier")}${cell(row.cashier)}</Row><Row>${cell("Date")}${cell(displayDate(row.date))}${cell("Time")}${cell(row.time)}${cell("Drawer")}${cell(row.drawer)}</Row><Row>${cell("COINS")}</Row><Row>${cell("Denomination")}${cell("Rolls")}${cell("Loose")}${cell("Line Total")}</Row>${coinInfo.map((c) => `<Row>${cell(c.label)}${cell(coins[c.key]?.rolled ?? 0)}${cell(coins[c.key]?.loose ?? 0)}${cell(money((coins[c.key]?.rolled ?? 0) * c.rollValue + (coins[c.key]?.loose ?? 0) * c.looseValue))}</Row>`).join("")}<Row>${cell("BILLS")}</Row><Row>${cell("Denomination")}${cell("Quantity")}${cell("Line Total")}</Row>${billInfo.map((b) => `<Row>${cell(`$${b.value}`)}${cell(bills[b.key] ?? 0)}${cell(money((bills[b.key] ?? 0) * b.value))}</Row>`).join("")}</Table></Worksheet></Workbook>`;
+          const xml = `<?xml version="1.0"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Worksheet ss:Name="Cash Count"><Table><Row>${cell("Manager on Duty")}${cell(row.manager)}${cell("Cashier")}${cell(row.cashier)}${cell("TOTAL")}${cell(money(row.total))}</Row><Row>${cell("Date")}${cell(displayDate(row.date))}${cell("Time")}${cell(row.time)}${cell("Drawer")}${cell(row.drawer)}</Row><Row>${cell("COINS")}</Row><Row>${cell("Denomination")}${cell("Rolls")}${cell("Loose")}${cell("Line Total")}</Row>${coinInfo.map((c) => `<Row>${cell(c.label)}${cell(coins[c.key]?.rolled ?? 0)}${cell(coins[c.key]?.loose ?? 0)}${cell(money((coins[c.key]?.rolled ?? 0) * c.rollValue + (coins[c.key]?.loose ?? 0) * c.looseValue))}</Row>`).join("")}<Row>${cell("BILLS")}</Row><Row>${cell("Denomination")}${cell("Quantity")}${cell("Line Total")}</Row>${billInfo.map((b) => `<Row>${cell(`$${b.value}`)}${cell(bills[b.key] ?? 0)}${cell(money((bills[b.key] ?? 0) * b.value))}</Row>`).join("")}</Table></Worksheet></Workbook>`;
           const url = URL.createObjectURL(
             new Blob([xml], { type: "application/vnd.ms-excel" }),
           );
@@ -542,40 +546,32 @@ export function CashDrawerDashboard({ user, initialHistory }: Props) {
           Sign Out
         </button>
       </div>
-      <div className="mx-auto max-w-7xl p-4 sm:p-6">
+      <div className="mx-auto max-w-9xl p-4 sm:p-6">
         <form
           onSubmit={save}
           className="cash-slip rounded-lg border-2 border-slate-800 bg-white p-4 shadow-sm sm:p-7"
         >
-          <div className="mb-6 flex items-stretch justify-between gap-3 border-b-2 border-slate-800 pb-3">
-            <div className="flex flex-1 flex-col justify-between gap-2.5 min-w-0">
-              <label className="flex flex-col text-xs sm:text-sm">
-                <span className="font-bold text-slate-700">
-                  Manager on Duty
-                </span>
-                <input
-                  value={form.manager}
-                  onChange={(e) =>
-                    setForm({ ...form, manager: e.target.value })
-                  }
-                  className="mt-0.5 w-full border-b border-slate-400 bg-transparent px-1 py-1 font-medium focus:border-slate-800 focus:outline-none"
-                  placeholder="Name..."
-                />
-              </label>
+          <div className="mb-6 grid grid-cols-3 flex items-stretch justify-between gap-3 border-b-2 border-slate-800 pb-3">
+            <label className="flex flex-col text-xs sm:text-sm">
+              <span className="font-bold text-slate-700">Manager on Duty</span>
+              <input
+                value={form.manager}
+                onChange={(e) => setForm({ ...form, manager: e.target.value })}
+                className="mt-0.5 w-full border-b border-slate-400 bg-transparent px-1 py-1 font-medium focus:border-slate-800 focus:outline-none"
+                placeholder="Name..."
+              />
+            </label>
 
-              <label className="flex flex-col text-xs sm:text-sm">
-                <span className="font-bold text-slate-700">Cashier</span>
-                <input
-                  value={form.cashier}
-                  onChange={(e) =>
-                    setForm({ ...form, cashier: e.target.value })
-                  }
-                  className="mt-0.5 w-full border-b border-slate-400 bg-transparent px-1 py-1 font-medium focus:border-slate-800 focus:outline-none"
-                  placeholder="Name..."
-                />
-              </label>
-            </div>
-            <div className="flex shrink-0 flex-col justify-center rounded-lg bg-yellow-300 px-3 py-2 text-right shadow-xs sm:px-5 sm:py-3">
+            <label className="flex flex-col text-xs sm:text-sm">
+              <span className="font-bold text-slate-700">Cashier</span>
+              <input
+                value={form.cashier}
+                onChange={(e) => setForm({ ...form, cashier: e.target.value })}
+                className="mt-0.5 w-full border-b border-slate-400 bg-transparent px-1 py-1 font-medium focus:border-slate-800 focus:outline-none"
+                placeholder="Name..."
+              />
+            </label>
+            <div className="flex shrink-0 flex-col justify-center rounded-lg bg-yellow-300 px-3 py-2 text-center shadow-xs sm:px-5 sm:py-3">
               <p className="text-[11px] font-extrabold uppercase tracking-wider text-slate-800">
                 Total
               </p>
